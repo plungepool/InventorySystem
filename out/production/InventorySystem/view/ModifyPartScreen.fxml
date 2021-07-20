@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.ModifyPartScreen"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyPartScreen">
+    <children>
+        <Label layoutX="68.0" layoutY="68.0" prefHeight="17.0" prefWidth="52.0" text="Add Part">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <RadioButton fx:id="InhouseRadio" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" text="In-House" />
+        <RadioButton fx:id="OutsourcedRadio" layoutX="364.0" layoutY="68.0" mnemonicParsing="false" text="Outsourced" />
+        <Label layoutX="86.0" layoutY="107.0" prefHeight="17.0" prefWidth="16.0" text="ID" />
+        <Label layoutX="78.0" layoutY="141.0" text="Name" />
+        <Label layoutX="86.0" layoutY="175.0" text="Inv" />
+        <Label layoutX="67.0" layoutY="209.0" text="Price/Cost" />
+        <Label layoutX="83.0" layoutY="243.0" text="Max" />
+        <Label fx:id="MachineCompanyLabel" layoutX="64.0" layoutY="277.0" text="Machine ID" />
+        <Label layoutX="320.0" layoutY="243.0" text="Min" />
+        <TextField fx:id="IdField" disable="true" layoutX="151.0" layoutY="103.0">
+            <font>
+                <Font name="System Italic" size="12.0" />
+            </font>
+        </TextField>
+        <TextField fx:id="NameField" layoutX="151.0" layoutY="137.0" />
+        <TextField fx:id="InvField" layoutX="151.0" layoutY="171.0" />
+        <TextField fx:id="PricecostField" layoutX="151.0" layoutY="205.0" />
+        <TextField fx:id="MinValue" layoutX="364.0" layoutY="239.0" />
+        <TextField fx:id="MachineCompanyField" layoutX="151.0" layoutY="273.0" />
+        <TextField fx:id="MaxField" layoutX="151.0" layoutY="239.0" />
+        <Button fx:id="SaveButton" layoutX="373.0" layoutY="311.0" mnemonicParsing="false" text="Save" />
+        <Button fx:id="CancelButton" layoutX="439.0" layoutY="311.0" mnemonicParsing="false" text="Cancel" />
+    </children>
 </AnchorPane>

@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreen">
    <children>
-      <Pane fx:id="PartsPane" layoutX="16.0" layoutY="50.0" prefHeight="200.0" prefWidth="334.0">
+      <Pane layoutX="16.0" layoutY="50.0" prefHeight="200.0" prefWidth="334.0">
          <children>
             <TableView fx:id="PartsTable" layoutX="12.0" layoutY="42.0" prefHeight="117.0" prefWidth="310.0">
                <columns>
@@ -15,7 +15,7 @@
                   <TableColumn prefWidth="77.0" text="Inventory Level" />
                   <TableColumn prefWidth="102.0" text="Price/Cost per Unit" />
                </columns></TableView>
-            <Label fx:id="PartsLabel" layoutX="14.0" layoutY="25.0" prefHeight="17.0" prefWidth="46.0" text="Parts">
+            <Label layoutX="14.0" layoutY="25.0" prefHeight="17.0" prefWidth="46.0" text="Parts">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
@@ -25,7 +25,7 @@
             <Button fx:id="DeletePartButton" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" text="Delete" />
          </children>
       </Pane>
-      <Pane fx:id="ProductsPane" layoutX="350.0" layoutY="50.0" prefHeight="200.0" prefWidth="334.0">
+      <Pane layoutX="350.0" layoutY="50.0" prefHeight="200.0" prefWidth="334.0">
          <children>
             <TableView fx:id="ProductsTable" layoutX="12.0" layoutY="42.0" prefHeight="117.0" prefWidth="310.0">
               <columns>
@@ -35,7 +35,7 @@
                   <TableColumn prefWidth="102.0" text="Price/Cost per Unit" />
               </columns>
             </TableView>
-            <Label fx:id="ProductsLabel" layoutX="12.0" layoutY="25.0" text="Products">
+            <Label layoutX="12.0" layoutY="25.0" text="Products">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
@@ -45,10 +45,11 @@
             <Button fx:id="DeletePartButton1" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" text="Delete" />
          </children>
       </Pane>
-      <Label fx:id="ProgramLabel" layoutX="24.0" layoutY="25.0" prefHeight="17.0" prefWidth="181.0" text="Inventory Management System">
+      <Label layoutX="24.0" layoutY="25.0" prefHeight="17.0" prefWidth="181.0" text="Inventory Management System">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
+      <Button fx:id="ExitButton" layoutX="602.0" layoutY="261.0" mnemonicParsing="false" text="Exit" />
    </children>
 </AnchorPane>
