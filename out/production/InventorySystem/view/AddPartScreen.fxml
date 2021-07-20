@@ -31,7 +31,7 @@
       <TextField fx:id="MinValue" layoutX="364.0" layoutY="239.0" />
       <TextField fx:id="MachineCompanyField" layoutX="151.0" layoutY="273.0" />
       <TextField fx:id="MaxField" layoutX="151.0" layoutY="239.0" />
-      <Button fx:id="SaveButton" layoutX="373.0" layoutY="311.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="CancelButton" layoutX="439.0" layoutY="311.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="SaveButton" layoutX="373.0" layoutY="311.0" mnemonicParsing="false" onAction="#toMainScreen" text="Save" />
+      <Button fx:id="CancelButton" layoutX="439.0" layoutY="311.0" mnemonicParsing="false" onAction="#toMainScreen" text="Cancel" />
    </children>
 </AnchorPane>

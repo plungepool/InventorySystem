@@ -42,7 +42,7 @@
          </columns>
       </TableView>
       <Button fx:id="RemoveAssociatedButton" layoutX="515.0" layoutY="324.0" mnemonicParsing="false" text="Remove Associated Part" />
-      <Button fx:id="SaveButton" layoutX="530.0" layoutY="355.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="CancelButton" layoutX="591.0" layoutY="355.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="SaveButton" layoutX="530.0" layoutY="355.0" mnemonicParsing="false" onAction="#toMainScreen" text="Save" />
+      <Button fx:id="CancelButton" layoutX="591.0" layoutY="355.0" mnemonicParsing="false" onAction="#toMainScreen" text="Cancel" />
    </children>
 </AnchorPane>
