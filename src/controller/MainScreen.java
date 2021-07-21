@@ -1,15 +1,21 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import model.Inventory;
+import model.Part;
+import model.Product;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,21 +23,41 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainScreen implements Initializable {
-    public TableView PartsTable;
+    public TableView<Part> PartsTable;
     public TextField PartsSearch;
     public Button AddPartButton;
     public Button ModifyPartButton;
     public Button DeletePartButton;
-    public TableView ProductsTable;
+    public TableView<Product> ProductsTable;
     public TextField ProductsSearch;
     public Button AddProductButton;
     public Button ModifyPartButton1;
     public Button DeletePartButton1;
     public Button ExitButton;
 
+    public TableColumn<Object, Object> partIdColumn;
+    public TableColumn<Object, Object> partNameColumn;
+    public TableColumn<Object, Object> partInvColumn;
+    public TableColumn<Object, Object> partPriceColumn;
+
+    public TableColumn<Object, Object> prodIdColumn;
+    public TableColumn<Object, Object> prodNameColumn;
+    public TableColumn<Object, Object> prodInvColumn;
+    public TableColumn<Object, Object> prodPriceColumn;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        PartsTable.setItems(Inventory.getAllParts());
+        partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partInvColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
+        ProductsTable.setItems(Inventory.getAllProducts());
+        prodIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        prodNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        prodInvColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        prodPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     public void toAddPartScreen(ActionEvent actionEvent) throws IOException {

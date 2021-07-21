@@ -1,17 +1,18 @@
 package model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Inventory {
-    private static ObservableList<Part> allParts;
-    private static ObservableList<Product> allProducts;
+    private static final ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private static final ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
-    public void addPart(Part newPart) {
-        ;
+    public static void addPart(Part newPart) {
+        allParts.add(newPart);
     }
 
-    public void addProduct(Product newProduct) {
-        ;
+    public static void addProduct(Product newProduct) {
+        allProducts.add(newProduct);
     }
 
 //    public static Part lookupPart(int partId) {
@@ -46,12 +47,12 @@ public class Inventory {
 //        ;
 //    }
 //
-//    public static ObservableList<Part> getAllParts() {
-//        ;
-//    }
-//
-//    public static ObservableList<Product> getAllProducts() {
-//        ;
-//    }
+    public static ObservableList<Part> getAllParts() {
+        return allParts;
+    }
+
+    public static ObservableList<Product> getAllProducts() {
+        return allProducts;
+    }
 
 }
