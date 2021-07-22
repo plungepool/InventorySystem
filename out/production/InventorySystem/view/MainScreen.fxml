@@ -19,7 +19,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <TextField fx:id="PartsSearch" layoutX="173.0" layoutY="13.0" promptText="Search by Part ID or Name..." />
+            <TextField fx:id="PartsSearch" layoutX="173.0" layoutY="13.0" onAction="#getPartResultsHandler" promptText="Search by Part ID or Name..." />
             <Button fx:id="AddPartButton" layoutX="167.0" layoutY="161.0" mnemonicParsing="false" onAction="#toAddPartScreen" text="Add" />
             <Button fx:id="ModifyPartButton" layoutX="211.0" layoutY="161.0" mnemonicParsing="false" onAction="#toModifyPartScreen" text="Modify" />
             <Button fx:id="DeletePartButton" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" text="Delete" />
@@ -39,7 +39,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <TextField fx:id="ProductsSearch" layoutX="173.0" layoutY="13.0" promptText="Search by Product ID or Name..." />
+            <TextField fx:id="ProductsSearch" layoutX="173.0" layoutY="13.0" onAction="#getProductResultsHandler" promptText="Search by Product ID or Name..." />
             <Button fx:id="AddProductButton" layoutX="167.0" layoutY="161.0" mnemonicParsing="false" onAction="#toAddProductScreen" text="Add" />
             <Button fx:id="ModifyPartButton1" layoutX="211.0" layoutY="161.0" mnemonicParsing="false" onAction="#toModifyProductScreen" text="Modify" />
             <Button fx:id="DeletePartButton1" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" text="Delete" />

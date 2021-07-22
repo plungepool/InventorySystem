@@ -18,15 +18,15 @@ public class Inventory {
 //    public static Part lookupPart(int partId) {
 //        ;
 //    }
-//
+
 //    public static Product lookupProduct(int productId) {
 //        ;
 //    }
-//
+
 //    public static ObservableList<Part> lookupPart(String partName) {
 //        ;
 //    }
-//
+
 //    public static ObservableList<Product> lookupProduct(String productName) {
 //        ;
 //    }
@@ -42,11 +42,11 @@ public class Inventory {
 //    public static boolean deletePart(Part selectedPart) {
 //        ;
 //    }
-//
+
 //    public static boolean deleteProduct(Product selectedProduct) {
 //        ;
 //    }
-//
+
     public static ObservableList<Part> getAllParts() {
         return allParts;
     }

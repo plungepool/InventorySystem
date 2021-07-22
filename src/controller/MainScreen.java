@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -94,6 +95,86 @@ public class MainScreen implements Initializable {
         stage.setTitle("Modify Product");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void getPartResultsHandler(ActionEvent actionEvent) {
+        String q = PartsSearch.getText();
+        ObservableList<Part> parts = searchByPartName(q);
+        if(parts.size() == 0) {
+            try {
+                int id = Integer.parseInt(q);
+                Part p = getPartWithId(id);
+                if (p != null) {
+                    parts.add(p);
+                }
+            }
+            catch (NumberFormatException e) {
+                //ignore
+            }
+        }
+        PartsTable.setItems(parts);
+//        PartsSearch.setText("");
+    }
+
+    private ObservableList<Part> searchByPartName(String partialName) {
+        ObservableList<Part> namedParts = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part p : allParts) {
+            if(p.getName().contains(partialName)){
+                namedParts.add(p);
+            }
+        }
+        return namedParts;
+    }
+
+    private Part getPartWithId(int id){
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part p : allParts) {
+            if(p.getId() == id){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void getProductResultsHandler(ActionEvent actionEvent) {
+        String q = ProductsSearch.getText();
+        ObservableList<Product> products = searchByProductName(q);
+        if(products.size() == 0) {
+            try {
+                int id = Integer.parseInt(q);
+                Product p = getProductWithId(id);
+                if (p != null) {
+                    products.add(p);
+                }
+            }
+            catch (NumberFormatException e) {
+                //ignore
+            }
+        }
+        ProductsTable.setItems(products);
+//        ProductsSearch.setText("");
+    }
+
+    private ObservableList<Product> searchByProductName(String partialName) {
+        ObservableList<Product> namedProds = FXCollections.observableArrayList();
+        ObservableList<Product> allProds = Inventory.getAllProducts();
+        for(Product p : allProds) {
+            if(p.getName().contains(partialName)){
+                namedProds.add(p);
+            }
+        }
+        return namedProds;
+    }
+
+    private Product getProductWithId(int id){
+        ObservableList<Product> allProds = Inventory.getAllProducts();
+        for(Product p : allProds) {
+            if(p.getId() == id){
+                return p;
+            }
+        }
+        return null;
     }
 
 }
