@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,7 +13,9 @@ import model.InHouse;
 import model.Inventory;
 import model.OutSourced;
 import model.Part;
+import model.Product;
 
+import javax.lang.model.type.NullType;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -54,9 +57,22 @@ public class AddPartScreen implements Initializable {
         MachineCompanyLabel.setText("Company Name");
     }
 
+    public int findNewPartID(int newID) {
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for (Part p : allParts) {
+            if (p.getId() == newID) {
+                ++newID;
+                findNewPartID(newID);
+            }
+        }
+        return newID;
+    }
+
     public void onSavePart(ActionEvent actionEvent) throws IOException {
         if (sourceGroup.getSelectedToggle() == InhouseRadio) {
-            InHouse newPart = new InHouse(100,
+            int newID = 1;
+            newID = findNewPartID(newID);
+            InHouse newPart = new InHouse(newID,
                     NameField.getText(),
                     Double.parseDouble(PricecostField.getText()),
                     Integer.parseInt(InvField.getText()),
