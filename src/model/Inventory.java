@@ -39,13 +39,15 @@ public class Inventory {
         ;
     }
 
-//    public static boolean deletePart(Part selectedPart) {
-//        ;
-//    }
+    public static boolean deletePart(Part selectedPart) {
+        allParts.remove(selectedPart);
+        return true;
+    }
 
-//    public static boolean deleteProduct(Product selectedProduct) {
-//        ;
-//    }
+    public static boolean deleteProduct(Product selectedProduct) {
+        allProducts.remove(selectedProduct);
+        return true;
+    }
 
     public static ObservableList<Part> getAllParts() {
         return allParts;

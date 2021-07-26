@@ -22,7 +22,7 @@
             <TextField fx:id="PartsSearch" layoutX="173.0" layoutY="13.0" onAction="#getPartResultsHandler" promptText="Search by Part ID or Name..." />
             <Button fx:id="AddPartButton" layoutX="167.0" layoutY="161.0" mnemonicParsing="false" onAction="#toAddPartScreen" text="Add" />
             <Button fx:id="ModifyPartButton" layoutX="211.0" layoutY="161.0" mnemonicParsing="false" onAction="#toModifyPartScreen" text="Modify" />
-            <Button fx:id="DeletePartButton" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="DeletePartButton" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" onAction="#onDeletePartButton" text="Delete" />
          </children>
       </Pane>
       <Pane layoutX="350.0" layoutY="50.0" prefHeight="200.0" prefWidth="334.0">
@@ -42,7 +42,7 @@
             <TextField fx:id="ProductsSearch" layoutX="173.0" layoutY="13.0" onAction="#getProductResultsHandler" promptText="Search by Product ID or Name..." />
             <Button fx:id="AddProductButton" layoutX="167.0" layoutY="161.0" mnemonicParsing="false" onAction="#toAddProductScreen" text="Add" />
             <Button fx:id="ModifyPartButton1" layoutX="211.0" layoutY="161.0" mnemonicParsing="false" onAction="#toModifyProductScreen" text="Modify" />
-            <Button fx:id="DeletePartButton1" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="DeletePartButton1" layoutX="271.0" layoutY="161.0" mnemonicParsing="false" onAction="#onDeleteProductButton" text="Delete" />
          </children>
       </Pane>
       <Label layoutX="24.0" layoutY="25.0" prefHeight="17.0" prefWidth="181.0" text="Inventory Management System">

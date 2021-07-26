@@ -177,4 +177,13 @@ public class MainScreen implements Initializable {
         return null;
     }
 
+    public void onDeletePartButton(ActionEvent actionEvent) {
+        Part itemToDelete = PartsTable.getSelectionModel().getSelectedItem();
+        Inventory.deletePart(itemToDelete);
+    }
+
+    public void onDeleteProductButton(ActionEvent actionEvent) {
+        Product itemToDelete = ProductsTable.getSelectionModel().getSelectedItem();
+        Inventory.deleteProduct(itemToDelete);
+    }
 }
