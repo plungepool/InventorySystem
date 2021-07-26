@@ -57,7 +57,7 @@ public class AddPartScreen implements Initializable {
         MachineCompanyLabel.setText("Company Name");
     }
 
-    public int findNewPartID(int newID) {
+    private int findNewPartID(int newID) {
         ObservableList<Part> allParts = Inventory.getAllParts();
         for (Part p : allParts) {
             if (p.getId() == newID) {
@@ -68,29 +68,41 @@ public class AddPartScreen implements Initializable {
         return newID;
     }
 
+    private boolean checkInventoryValidity(int stock, int min, int max) {
+        if ((stock >= min) && (stock <= max)) {
+            return true;
+        }
+        return false;
+    }
+
     public void onSavePart(ActionEvent actionEvent) throws IOException {
-        if (sourceGroup.getSelectedToggle() == InhouseRadio) {
-            int newID = 1;
-            newID = findNewPartID(newID);
-            InHouse newPart = new InHouse(newID,
-                    NameField.getText(),
-                    Double.parseDouble(PricecostField.getText()),
-                    Integer.parseInt(InvField.getText()),
-                    Integer.parseInt(MinValue.getText()),
-                    Integer.parseInt(MaxField.getText()),
-                    Integer.parseInt(MachineCompanyField.getText()));
-            Inventory.addPart(newPart);
+        int newID = 1;
+        newID = findNewPartID(newID);
+        if (checkInventoryValidity(Integer.parseInt(InvField.getText()), Integer.parseInt(MinValue.getText()), Integer.parseInt(MaxField.getText()))) {
+            if (sourceGroup.getSelectedToggle() == InhouseRadio) {
+                InHouse newPart = new InHouse(newID,
+                        NameField.getText(),
+                        Double.parseDouble(PricecostField.getText()),
+                        Integer.parseInt(InvField.getText()),
+                        Integer.parseInt(MinValue.getText()),
+                        Integer.parseInt(MaxField.getText()),
+                        Integer.parseInt(MachineCompanyField.getText()));
+                Inventory.addPart(newPart);
+            }
+            else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
+                OutSourced newPart = new OutSourced(100,
+                        NameField.getText(),
+                        Integer.parseInt(PricecostField.getText()),
+                        Integer.parseInt(InvField.getText()),
+                        Integer.parseInt(MinValue.getText()),
+                        Integer.parseInt(MaxField.getText()),
+                        MachineCompanyField.getText());
+                Inventory.addPart(newPart);
+            }
+            toMainScreen(actionEvent);
         }
-        else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
-            OutSourced newPart = new OutSourced(100,
-                    NameField.getText(),
-                    Integer.parseInt(PricecostField.getText()),
-                    Integer.parseInt(InvField.getText()),
-                    Integer.parseInt(MinValue.getText()),
-                    Integer.parseInt(MaxField.getText()),
-                    MachineCompanyField.getText());
-            Inventory.addPart(newPart);
+        else {
+            //throw warning invalid inventory
         }
-        toMainScreen(actionEvent);
     }
 }
