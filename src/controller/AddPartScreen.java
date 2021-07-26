@@ -8,6 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.InHouse;
+import model.Inventory;
+import model.OutSourced;
+import model.Part;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,4 +46,35 @@ public class AddPartScreen implements Initializable {
         stage.show();
     }
 
+    public void onInhouseSelect(ActionEvent actionEvent) {
+        MachineCompanyLabel.setText("Machine ID");
+    }
+
+    public void onOutsourcedSelect(ActionEvent actionEvent) {
+        MachineCompanyLabel.setText("Company Name");
+    }
+
+    public void onSavePart(ActionEvent actionEvent) throws IOException {
+        if (sourceGroup.getSelectedToggle() == InhouseRadio) {
+            InHouse newPart = new InHouse(100,
+                    NameField.getText(),
+                    Double.parseDouble(PricecostField.getText()),
+                    Integer.parseInt(InvField.getText()),
+                    Integer.parseInt(MinValue.getText()),
+                    Integer.parseInt(MaxField.getText()),
+                    Integer.parseInt(MachineCompanyField.getText()));
+            Inventory.addPart(newPart);
+        }
+        else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
+            OutSourced newPart = new OutSourced(100,
+                    NameField.getText(),
+                    Integer.parseInt(PricecostField.getText()),
+                    Integer.parseInt(InvField.getText()),
+                    Integer.parseInt(MinValue.getText()),
+                    Integer.parseInt(MaxField.getText()),
+                    MachineCompanyField.getText());
+            Inventory.addPart(newPart);
+        }
+        toMainScreen(actionEvent);
+    }
 }

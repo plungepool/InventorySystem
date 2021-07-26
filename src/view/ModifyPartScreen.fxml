@@ -6,22 +6,22 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyPartScreen">
     <children>
-        <Label layoutX="68.0" layoutY="68.0" prefHeight="17.0" prefWidth="70.0" text="Modify Part">
+        <Label layoutX="51.0" layoutY="68.0" prefHeight="17.0" prefWidth="70.0" text="Modify Part">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
-        <RadioButton fx:id="InhouseRadio" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" text="In-House">
+        <RadioButton fx:id="InhouseRadio" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onAction="#onInhouseSelect" selected="true" text="In-House">
          <toggleGroup>
             <ToggleGroup fx:id="sourceGroup" />
          </toggleGroup></RadioButton>
-        <RadioButton fx:id="OutsourcedRadio" layoutX="364.0" layoutY="68.0" mnemonicParsing="false" text="Outsourced" toggleGroup="$sourceGroup" />
-        <Label layoutX="86.0" layoutY="107.0" prefHeight="17.0" prefWidth="16.0" text="ID" />
-        <Label layoutX="78.0" layoutY="141.0" text="Name" />
-        <Label layoutX="86.0" layoutY="175.0" text="Inv" />
-        <Label layoutX="67.0" layoutY="209.0" text="Price/Cost" />
-        <Label layoutX="83.0" layoutY="243.0" text="Max" />
-        <Label fx:id="MachineCompanyLabel" layoutX="64.0" layoutY="277.0" text="Machine ID" />
+        <RadioButton fx:id="OutsourcedRadio" layoutX="364.0" layoutY="68.0" mnemonicParsing="false" onAction="#onOutsourcedSelect" text="Outsourced" toggleGroup="$sourceGroup" />
+        <Label layoutX="78.0" layoutY="107.0" prefHeight="17.0" prefWidth="16.0" text="ID" />
+        <Label layoutX="70.0" layoutY="141.0" text="Name" />
+        <Label layoutX="78.0" layoutY="175.0" text="Inv" />
+        <Label layoutX="59.0" layoutY="209.0" text="Price/Cost" />
+        <Label layoutX="75.0" layoutY="243.0" text="Max" />
+        <Label fx:id="MachineCompanyLabel" layoutX="56.0" layoutY="277.0" text="Machine ID" />
         <Label layoutX="320.0" layoutY="243.0" text="Min" />
         <TextField fx:id="IdField" disable="true" layoutX="151.0" layoutY="103.0">
             <font>

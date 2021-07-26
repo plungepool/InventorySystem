@@ -45,4 +45,14 @@ public class ModifyPartScreen implements Initializable {
         stage.show();
     }
 
+    public void onInhouseSelect(ActionEvent actionEvent) {
+        MachineCompanyLabel.setText("Machine ID");
+    }
+
+    public void onOutsourcedSelect(ActionEvent actionEvent) {
+        MachineCompanyLabel.setText("Company Name");
+    }
+
+//    InhouseRadio.setSelected(true);
+
 }
