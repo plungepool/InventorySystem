@@ -80,6 +80,8 @@ public class MainScreen implements Initializable {
     }
 
     public void toModifyPartScreen(ActionEvent actionEvent) throws IOException {
+        ModifyPartScreen.itemToModify = PartsTable.getSelectionModel().getSelectedItem();
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyPartScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 600, 400);

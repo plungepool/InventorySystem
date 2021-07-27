@@ -11,7 +11,7 @@
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
-        <RadioButton fx:id="InhouseRadio" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onAction="#onInhouseSelect" selected="true" text="In-House">
+        <RadioButton fx:id="InhouseRadio" layoutX="205.0" layoutY="68.0" mnemonicParsing="false" onAction="#onInhouseSelect" text="In-House">
          <toggleGroup>
             <ToggleGroup fx:id="sourceGroup" />
          </toggleGroup></RadioButton>
@@ -31,10 +31,10 @@
         <TextField fx:id="NameField" layoutX="151.0" layoutY="137.0" />
         <TextField fx:id="InvField" layoutX="151.0" layoutY="171.0" />
         <TextField fx:id="PricecostField" layoutX="151.0" layoutY="205.0" />
-        <TextField fx:id="MinValue" layoutX="364.0" layoutY="239.0" />
+        <TextField fx:id="MinField" layoutX="364.0" layoutY="239.0" />
         <TextField fx:id="MachineCompanyField" layoutX="151.0" layoutY="273.0" />
         <TextField fx:id="MaxField" layoutX="151.0" layoutY="239.0" />
-        <Button fx:id="SaveButton" layoutX="373.0" layoutY="311.0" mnemonicParsing="false" onAction="#toMainScreen" text="Save" />
+        <Button fx:id="SaveButton" layoutX="373.0" layoutY="311.0" mnemonicParsing="false" onAction="#onSaveButton" text="Save" />
         <Button fx:id="CancelButton" layoutX="439.0" layoutY="311.0" mnemonicParsing="false" onAction="#toMainScreen" text="Cancel" />
     </children>
 </AnchorPane>

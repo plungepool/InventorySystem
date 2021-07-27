@@ -10,8 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.InHouse;
-import model.Inventory;
 import model.OutSourced;
+import model.Inventory;
 import model.Part;
 import model.Product;
 
@@ -28,7 +28,7 @@ public class AddPartScreen implements Initializable {
     public TextField NameField;
     public TextField InvField;
     public TextField PricecostField;
-    public TextField MinValue;
+    public TextField MinField;
     public TextField MachineCompanyField;
     public TextField MaxField;
     public Button SaveButton;
@@ -66,35 +66,32 @@ public class AddPartScreen implements Initializable {
             }
         }
         return newID;
-    }
+    } // easily make more efficient by storing last created newID statically
 
     private boolean checkInventoryValidity(int stock, int min, int max) {
-        if ((stock >= min) && (stock <= max)) {
-            return true;
-        }
-        return false;
+        return (stock >= min) && (stock <= max);
     }
 
     public void onSavePart(ActionEvent actionEvent) throws IOException {
         int newID = 1;
         newID = findNewPartID(newID);
-        if (checkInventoryValidity(Integer.parseInt(InvField.getText()), Integer.parseInt(MinValue.getText()), Integer.parseInt(MaxField.getText()))) {
+        if (checkInventoryValidity(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {
             if (sourceGroup.getSelectedToggle() == InhouseRadio) {
                 InHouse newPart = new InHouse(newID,
                         NameField.getText(),
                         Double.parseDouble(PricecostField.getText()),
                         Integer.parseInt(InvField.getText()),
-                        Integer.parseInt(MinValue.getText()),
+                        Integer.parseInt(MinField.getText()),
                         Integer.parseInt(MaxField.getText()),
                         Integer.parseInt(MachineCompanyField.getText()));
                 Inventory.addPart(newPart);
             }
             else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
-                OutSourced newPart = new OutSourced(100,
+                OutSourced newPart = new OutSourced(newID,
                         NameField.getText(),
                         Integer.parseInt(PricecostField.getText()),
                         Integer.parseInt(InvField.getText()),
-                        Integer.parseInt(MinValue.getText()),
+                        Integer.parseInt(MinField.getText()),
                         Integer.parseInt(MaxField.getText()),
                         MachineCompanyField.getText());
                 Inventory.addPart(newPart);

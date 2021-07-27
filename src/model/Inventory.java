@@ -15,9 +15,15 @@ public class Inventory {
         allProducts.add(newProduct);
     }
 
-//    public static Part lookupPart(int partId) {
-//        ;
-//    }
+    public static Part lookupPart(int partId) {
+        Part foundPart = null;
+        for (Part p : allParts) {
+            if (p.getId() == partId) {
+                foundPart = p;
+            }
+        }
+        return foundPart;
+    }
 
 //    public static Product lookupProduct(int productId) {
 //        ;
@@ -32,7 +38,7 @@ public class Inventory {
 //    }
 
     public static void updatePart(int index, Part selectedPart) {
-        ;
+        allParts.set(index, selectedPart);
     }
 
     public static void updateProduct(int index, Product newProduct) {
