@@ -13,9 +13,7 @@ import model.InHouse;
 import model.OutSourced;
 import model.Inventory;
 import model.Part;
-import model.Product;
 
-import javax.lang.model.type.NullType;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -66,40 +64,69 @@ public class AddPartScreen implements Initializable {
             }
         }
         return newID;
-    } // easily make more efficient by storing last created newID statically
+    }
 
-    private boolean checkInventoryValidity(int stock, int min, int max) {
+    private boolean checkInventoryRanges(int stock, int min, int max) {
         return (stock >= min) && (stock <= max);
+    }
+
+    private void checkForInvalidIntFields() {
+        try {
+            int testInv = Integer.parseInt(InvField.getText());
+            int testMin = Integer.parseInt(MinField.getText());
+            int testMax = Integer.parseInt(MaxField.getText());
+        }
+        catch (NumberFormatException a) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: Invalid input.");
+            error.setContentText("Check values and try again.");
+            error.showAndWait();
+        }
     }
 
     public void onSavePart(ActionEvent actionEvent) throws IOException {
         int newID = 1;
         newID = findNewPartID(newID);
-        if (checkInventoryValidity(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {
-            if (sourceGroup.getSelectedToggle() == InhouseRadio) {
-                InHouse newPart = new InHouse(newID,
-                        NameField.getText(),
-                        Double.parseDouble(PricecostField.getText()),
-                        Integer.parseInt(InvField.getText()),
-                        Integer.parseInt(MinField.getText()),
-                        Integer.parseInt(MaxField.getText()),
-                        Integer.parseInt(MachineCompanyField.getText()));
-                Inventory.addPart(newPart);
+        checkForInvalidIntFields();
+        if (checkInventoryRanges(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {
+            try {
+                if (sourceGroup.getSelectedToggle() == InhouseRadio) {
+                    InHouse newPart = new InHouse(newID,
+                            NameField.getText(),
+                            Double.parseDouble(PricecostField.getText()),
+                            Integer.parseInt(InvField.getText()),
+                            Integer.parseInt(MinField.getText()),
+                            Integer.parseInt(MaxField.getText()),
+                            Integer.parseInt(MachineCompanyField.getText()));
+                    Inventory.addPart(newPart);
+                }
+                else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
+                    OutSourced newPart = new OutSourced(newID,
+                            NameField.getText(),
+                            Integer.parseInt(PricecostField.getText()),
+                            Integer.parseInt(InvField.getText()),
+                            Integer.parseInt(MinField.getText()),
+                            Integer.parseInt(MaxField.getText()),
+                            MachineCompanyField.getText());
+                    Inventory.addPart(newPart);
+                }
+                toMainScreen(actionEvent);
             }
-            else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
-                OutSourced newPart = new OutSourced(newID,
-                        NameField.getText(),
-                        Integer.parseInt(PricecostField.getText()),
-                        Integer.parseInt(InvField.getText()),
-                        Integer.parseInt(MinField.getText()),
-                        Integer.parseInt(MaxField.getText()),
-                        MachineCompanyField.getText());
-                Inventory.addPart(newPart);
+            catch (Exception e) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error");
+                error.setHeaderText("Error: Invalid input.");
+                error.setContentText("Check values and try again.");
+                error.showAndWait();
             }
-            toMainScreen(actionEvent);
         }
         else {
-            //throw warning invalid inventory
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: Please enter valid supply ranges.");
+            error.setContentText("Press ok to continue.");
+            error.showAndWait();
         }
     }
 }

@@ -8,12 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import model.Inventory;
 import model.Part;
 import model.Product;
@@ -21,6 +18,7 @@ import model.Product;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainScreen implements Initializable {
@@ -80,23 +78,40 @@ public class MainScreen implements Initializable {
     }
 
     public void toModifyPartScreen(ActionEvent actionEvent) throws IOException {
-        ModifyPartScreen.itemToModify = PartsTable.getSelectionModel().getSelectedItem();
-
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyPartScreen.fxml")));
-        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 600, 400);
-        stage.setTitle("Modify Part");
-        stage.setScene(scene);
-        stage.show();
+        try {
+            ModifyPartScreen.itemToModify = PartsTable.getSelectionModel().getSelectedItem();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyPartScreen.fxml")));
+            Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 600, 400);
+            stage.setTitle("Modify Part");
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (Exception e) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: No part selected.");
+            error.setContentText("Press ok to return.");
+            error.showAndWait();
+        }
     }
 
     public void toModifyProductScreen(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyProductScreen.fxml")));
-        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 700, 400);
-        stage.setTitle("Modify Product");
-        stage.setScene(scene);
-        stage.show();
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyProductScreen.fxml")));
+            Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 700, 400);
+            stage.setTitle("Modify Product");
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (Exception e) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: No product selected.");
+            error.setContentText("Press ok to return.");
+            error.showAndWait();
+        }
     }
 
     public void getPartResultsHandler(ActionEvent actionEvent) {
@@ -109,13 +124,23 @@ public class MainScreen implements Initializable {
                 if (p != null) {
                     parts.add(p);
                 }
+                else {
+                    Alert error = new Alert(Alert.AlertType.INFORMATION);
+                    error.setTitle("Part search");
+                    error.setHeaderText("No matching parts found.");
+                    error.setContentText("Press ok to continue.");
+                    error.showAndWait();
+                }
             }
             catch (NumberFormatException e) {
-                //ignore
+                Alert error = new Alert(Alert.AlertType.INFORMATION);
+                error.setTitle("Part search");
+                error.setHeaderText("No matching parts found.");
+                error.setContentText("Press ok to continue.");
+                error.showAndWait();
             }
         }
         PartsTable.setItems(parts);
-//        PartsSearch.setText("");
     }
 
     private ObservableList<Part> searchByPartName(String partialName) {
@@ -149,13 +174,23 @@ public class MainScreen implements Initializable {
                 if (p != null) {
                     products.add(p);
                 }
+                else {
+                    Alert error = new Alert(Alert.AlertType.INFORMATION);
+                    error.setTitle("Product search");
+                    error.setHeaderText("No matching products found.");
+                    error.setContentText("Press ok to continue.");
+                    error.showAndWait();
+                }
             }
             catch (NumberFormatException e) {
-                //ignore
+                Alert error = new Alert(Alert.AlertType.INFORMATION);
+                error.setTitle("Product search");
+                error.setHeaderText("No matching products found.");
+                error.setContentText("Press ok to continue.");
+                error.showAndWait();
             }
         }
         ProductsTable.setItems(products);
-//        ProductsSearch.setText("");
     }
 
     private ObservableList<Product> searchByProductName(String partialName) {
@@ -180,12 +215,52 @@ public class MainScreen implements Initializable {
     }
 
     public void onDeletePartButton(ActionEvent actionEvent) {
-        Part itemToDelete = PartsTable.getSelectionModel().getSelectedItem();
-        Inventory.deletePart(itemToDelete);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Part");
+        alert.setHeaderText("Are you sure you want to delete this part?");
+        alert.setContentText("Press ok to confirm.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            try {
+                Part itemToDelete = PartsTable.getSelectionModel().getSelectedItem();
+                Inventory.deletePart(itemToDelete);
+                PartsSearch.setText("");
+                getPartResultsHandler(actionEvent);
+            }
+            catch (Exception e) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error");
+                error.setHeaderText("Error: Part could not be deleted.");
+                error.setContentText("Press ok to continue.");
+                error.showAndWait();
+            }
+        }
     }
 
     public void onDeleteProductButton(ActionEvent actionEvent) {
-        Product itemToDelete = ProductsTable.getSelectionModel().getSelectedItem();
-        Inventory.deleteProduct(itemToDelete);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Product");
+        alert.setHeaderText("Are you sure you want to remove this product?");
+        alert.setContentText("Press ok to confirm.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            try {
+                Product itemToDelete = ProductsTable.getSelectionModel().getSelectedItem();
+                Inventory.deleteProduct(itemToDelete);
+                ProductsSearch.setText("");
+                getProductResultsHandler(actionEvent);
+            }
+            catch (Exception e) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error");
+                error.setHeaderText("Error: Product could not be deleted.");
+                error.setContentText("Press ok to continue.");
+                error.showAndWait();
+            }
+        }
+    }
+
+    public void onExitButton(ActionEvent actionEvent) {
+        System.exit(0);
     }
 }

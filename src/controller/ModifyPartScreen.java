@@ -67,32 +67,67 @@ public class ModifyPartScreen implements Initializable {
         MachineCompanyLabel.setText("Company Name");
     }
 
-    private boolean checkInventoryValidity(int stock, int min, int max) {
+    private boolean checkInventoryRanges(int stock, int min, int max) {
         return (stock >= min) && (stock <= max);
     }
 
+    private void checkForInvalidIntFields() {
+        try {
+            int testInv = Integer.parseInt(InvField.getText());
+            int testMin = Integer.parseInt(MinField.getText());
+            int testMax = Integer.parseInt(MaxField.getText());
+        }
+        catch (NumberFormatException a) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: Invalid input.");
+            error.setContentText("Check values and try again.");
+            error.showAndWait();
+        }
+    }
+
     public void onSaveButton(ActionEvent actionEvent) throws IOException {
-        if (checkInventoryValidity(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {
-            Part itemToModify = Inventory.lookupPart(Integer.parseInt(IdField.getText()));
-            itemToModify.setName(NameField.getText());
-            itemToModify.setPrice(Double.parseDouble(PricecostField.getText()));
-            itemToModify.setStock(Integer.parseInt(InvField.getText()));
-            itemToModify.setMin(Integer.parseInt(MinField.getText()));
-            itemToModify.setMax(Integer.parseInt(MaxField.getText()));
+        checkForInvalidIntFields();
+        if (checkInventoryRanges(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {
+            try {
+                Part itemToModify = Inventory.lookupPart(Integer.parseInt(IdField.getText()));
+                itemToModify.setName(NameField.getText());
+                itemToModify.setPrice(Double.parseDouble(PricecostField.getText()));
+                itemToModify.setStock(Integer.parseInt(InvField.getText()));
+                itemToModify.setMin(Integer.parseInt(MinField.getText()));
+                itemToModify.setMax(Integer.parseInt(MaxField.getText()));
 
-            if (itemToModify instanceof InHouse) {
-                ((InHouse) itemToModify).setMachineId(Integer.parseInt(MachineCompanyField.getText()));
+                if (sourceGroup.getSelectedToggle() == InhouseRadio) {
+                    InHouse newPart = new InHouse(itemToModify.getId(), itemToModify.getName(), itemToModify.getPrice(),
+                                                itemToModify.getStock(), itemToModify.getMin(), itemToModify.getMax(),
+                                                Integer.parseInt(MachineCompanyField.getText()));
+                    Inventory.addPart(newPart);
+                    Inventory.deletePart(itemToModify);
+                }
+                else if (sourceGroup.getSelectedToggle() == OutsourcedRadio) {
+                    OutSourced newPart = new OutSourced (itemToModify.getId(), itemToModify.getName(), itemToModify.getPrice(),
+                                                    itemToModify.getStock(), itemToModify.getMin(), itemToModify.getMax(),
+                                                    MachineCompanyField.getText());
+                    Inventory.addPart(newPart);
+                    Inventory.deletePart(itemToModify);
+                }
+                toMainScreen(actionEvent);
             }
-            if (itemToModify instanceof OutSourced) {
-                ((OutSourced) itemToModify).setCompanyName(MachineCompanyField.getText());
+            catch (NumberFormatException a) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error");
+                error.setHeaderText("Error: Invalid input.");
+                error.setContentText("Check values and try again.");
+                error.showAndWait();
             }
         }
-
-        //in order to change outsourced/inhouse need to destroy old item and make new one seems like
-
         else {
-            //inventory invalid
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: Please enter valid supply ranges.");
+            error.setContentText("Press ok to continue.");
+            error.showAndWait();
         }
-        toMainScreen(actionEvent);
     }
 }
+
