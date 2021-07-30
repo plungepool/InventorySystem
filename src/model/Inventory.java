@@ -25,9 +25,15 @@ public class Inventory {
         return foundPart;
     }
 
-//    public static Product lookupProduct(int productId) {
-//        ;
-//    }
+    public static Product lookupProduct(int productId) {
+        Product foundProduct = null;
+        for (Product p : allProducts) {
+            if (p.getId() == productId) {
+                foundProduct = p;
+            }
+        }
+        return foundProduct;
+    }
 
 //    public static ObservableList<Part> lookupPart(String partName) {
 //        ;
@@ -37,13 +43,13 @@ public class Inventory {
 //        ;
 //    }
 
-    public static void updatePart(int index, Part selectedPart) {
-        allParts.set(index, selectedPart);
-    }
+//    public static void updatePart(int index, Part selectedPart) {
+////        index is index in the associated part "array" not partID
+//    }
 
-    public static void updateProduct(int index, Product newProduct) {
-        ;
-    }
+//    public static void updateProduct(int index, Product newProduct) {
+//        ;
+//    }
 
     public static boolean deletePart(Part selectedPart) {
         allParts.remove(selectedPart);

@@ -1,15 +1,17 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,16 +26,37 @@ public class AddProductScreen implements Initializable {
     public TextField PriceField;
     public TextField MaxField;
     public TextField MinField;
-    public TableView PartTable;
+    public TableView<Part> PartsTable;
     public Button AddButton;
-    public TableView AssociatedPartTable;
+    public TableView<Part> AssociatedPartTable;
     public Button RemoveAssociatedButton;
     public Button SaveButton;
     public Button CancelButton;
+    public TextField PartsSearch;
+    public ObservableList<Part> associatedPartsList = FXCollections.observableArrayList();
+
+    public TableColumn<Object, Object> partIdColumn;
+    public TableColumn<Object, Object> partNameColumn;
+    public TableColumn<Object, Object> partInvColumn;
+    public TableColumn<Object, Object> partPriceColumn;
+
+    public TableColumn<Object, Object> associatedPartIdColumn;
+    public TableColumn<Object, Object> associatedPartNameColumn;
+    public TableColumn<Object, Object> associatedPartInvColumn;
+    public TableColumn<Object, Object> associatedPartPriceColumn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        PartsTable.setItems(Inventory.getAllParts());
+        partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partInvColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
+        associatedPartIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        associatedPartNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        associatedPartInvColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        associatedPartPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     public void toMainScreen(ActionEvent actionEvent) throws IOException {
@@ -45,4 +68,154 @@ public class AddProductScreen implements Initializable {
         stage.show();
     }
 
+    public void getPartResultsHandler(ActionEvent actionEvent) {
+        String q = PartsSearch.getText();
+        ObservableList<Part> parts = searchByPartName(q);
+        if(parts.size() == 0) {
+            try {
+                int id = Integer.parseInt(q);
+                Part p = getPartWithId(id);
+                if (p != null) {
+                    parts.add(p);
+                }
+                else {
+                    Alert error = new Alert(Alert.AlertType.INFORMATION);
+                    error.setTitle("Part search");
+                    error.setHeaderText("No matching parts found.");
+                    error.setContentText("Press ok to continue.");
+                    error.showAndWait();
+                }
+            }
+            catch (NumberFormatException e) {
+                Alert error = new Alert(Alert.AlertType.INFORMATION);
+                error.setTitle("Part search");
+                error.setHeaderText("No matching parts found.");
+                error.setContentText("Press ok to continue.");
+                error.showAndWait();
+            }
+        }
+        PartsTable.setItems(parts);
+    }
+
+    private ObservableList<Part> searchByPartName(String partialName) {
+        ObservableList<Part> namedParts = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part p : allParts) {
+            if(p.getName().contains(partialName)){
+                namedParts.add(p);
+            }
+        }
+        return namedParts;
+    }
+
+    private Part getPartWithId(int id){
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part p : allParts) {
+            if(p.getId() == id){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void onAddPartButton(ActionEvent actionEvent) {
+        Part selectedPartToAdd = PartsTable.getSelectionModel().getSelectedItem();
+        try {
+            associatedPartsList.add(new Part(selectedPartToAdd.getId(),
+                    selectedPartToAdd.getName(),
+                    selectedPartToAdd.getPrice(),
+                    selectedPartToAdd.getStock(),
+                    selectedPartToAdd.getMin(),
+                    selectedPartToAdd.getMax()));
+            AssociatedPartTable.setItems(associatedPartsList);
+        }
+        catch (Exception e) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: No part selected.");
+            error.setContentText("Press ok to return.");
+            error.showAndWait();
+        }
+    }
+
+    public void onRemovePartButton(ActionEvent actionEvent) {
+        Part selectedPartToRemove = AssociatedPartTable.getSelectionModel().getSelectedItem();
+
+        if (selectedPartToRemove == null) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: No part selected.");
+            error.setContentText("Press ok to return.");
+            error.showAndWait();
+        }
+        else {
+            associatedPartsList.remove(selectedPartToRemove);
+            AssociatedPartTable.setItems(associatedPartsList);
+        }
+    }
+
+    private int findNewProductID(int newID) {
+        ObservableList<Product> allProds = Inventory.getAllProducts();
+        for (Product p : allProds) {
+            if (p.getId() == newID) {
+                ++newID;
+                findNewProductID(newID);
+            }
+        }
+        return newID;
+    }
+
+    private boolean checkInventoryRanges(int stock, int min, int max) {
+        return (stock >= min) && (stock <= max);
+    }
+
+    private void checkForInvalidIntFields() {
+        try {
+            int testInv = Integer.parseInt(InvField.getText());
+            int testMin = Integer.parseInt(MinField.getText());
+            int testMax = Integer.parseInt(MaxField.getText());
+        }
+        catch (NumberFormatException a) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: Invalid input.");
+            error.setContentText("Check values and try again.");
+            error.showAndWait();
+        }
+    }
+
+    public void onSaveProduct(ActionEvent actionEvent) {
+        int newID = 1;
+        newID = findNewProductID(newID);
+        checkForInvalidIntFields();
+        if (checkInventoryRanges(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {
+            try {
+                Product newProduct = new Product(newID,
+                        NameField.getText(),
+                        Double.parseDouble(PriceField.getText()),
+                        Integer.parseInt(InvField.getText()),
+                        Integer.parseInt(MinField.getText()),
+                        Integer.parseInt(MaxField.getText()));
+                for (Part p : associatedPartsList) {
+                    newProduct.addAssociatedPart(p);
+                }
+                Inventory.addProduct(newProduct);
+                toMainScreen(actionEvent);
+            }
+            catch (Exception e) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error");
+                error.setHeaderText("Error: Invalid input.");
+                error.setContentText("Check values and try again.");
+                error.showAndWait();
+            }
+        }
+        else {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error");
+            error.setHeaderText("Error: Please enter valid supply ranges.");
+            error.setContentText("Press ok to continue.");
+            error.showAndWait();
+        }
+    }
 }

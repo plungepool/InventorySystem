@@ -98,6 +98,7 @@ public class MainScreen implements Initializable {
 
     public void toModifyProductScreen(ActionEvent actionEvent) throws IOException {
         try {
+            ModifyProductScreen.itemToModify = ProductsTable.getSelectionModel().getSelectedItem();
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyProductScreen.fxml")));
             Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 700, 400);
