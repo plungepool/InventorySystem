@@ -245,18 +245,28 @@ public class MainScreen implements Initializable {
         alert.setContentText("Press ok to confirm.");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            try {
-                Product itemToDelete = ProductsTable.getSelectionModel().getSelectedItem();
-                Inventory.deleteProduct(itemToDelete);
-                ProductsSearch.setText("");
-                getProductResultsHandler(actionEvent);
-            }
-            catch (Exception e) {
+            Product productToDelete = ProductsTable.getSelectionModel().getSelectedItem();
+            if (productToDelete.getAllAssociatedParts().size() >= 1) {
                 Alert error = new Alert(Alert.AlertType.ERROR);
                 error.setTitle("Error");
-                error.setHeaderText("Error: Product could not be deleted.");
-                error.setContentText("Press ok to continue.");
+                error.setHeaderText("Error: Products with associated parts can not be deleted.");
+                error.setContentText("Press ok to return.");
                 error.showAndWait();
+            }
+            else {
+                try {
+                    Product itemToDelete = ProductsTable.getSelectionModel().getSelectedItem();
+                    Inventory.deleteProduct(itemToDelete);
+                    ProductsSearch.setText("");
+                    getProductResultsHandler(actionEvent);
+                }
+                catch (Exception e) {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Error");
+                    error.setHeaderText("Error: Product could not be deleted.");
+                    error.setContentText("Press ok to continue.");
+                    error.showAndWait();
+                }
             }
         }
     }
