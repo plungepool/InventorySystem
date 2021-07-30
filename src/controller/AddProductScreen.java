@@ -18,6 +18,8 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controller for the add product screen.
+ FUTURE ENHANCEMENT - Storing most recently created part ID could make the findNewProductID method more efficient for large sets.*/
 public class AddProductScreen implements Initializable {
     public TextField PartSearch;
     public TextField IdField;
@@ -45,6 +47,7 @@ public class AddProductScreen implements Initializable {
     public TableColumn<Object, Object> associatedPartInvColumn;
     public TableColumn<Object, Object> associatedPartPriceColumn;
 
+    /** Initializers for the add product screen.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         PartsTable.setItems(Inventory.getAllParts());
@@ -59,6 +62,7 @@ public class AddProductScreen implements Initializable {
         associatedPartPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
+    /** Transitions to the main screen.*/
     public void toMainScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -68,6 +72,9 @@ public class AddProductScreen implements Initializable {
         stage.show();
     }
 
+    /** Handler for parts search function.
+     Attempts to search for parts by both ID and name.
+     RUNTIME ERROR - "No matching parts found" pop-up error for if ID integer can not be parsed.*/
     public void getPartResultsHandler(ActionEvent actionEvent) {
         String q = PartsSearch.getText();
         ObservableList<Part> parts = searchByPartName(q);
@@ -97,6 +104,9 @@ public class AddProductScreen implements Initializable {
         PartsTable.setItems(parts);
     }
 
+    /** Search function for part names.
+     For use within the search results handler.
+     @param partialName String or partial string to search for.*/
     private ObservableList<Part> searchByPartName(String partialName) {
         ObservableList<Part> namedParts = FXCollections.observableArrayList();
         ObservableList<Part> allParts = Inventory.getAllParts();
@@ -108,6 +118,9 @@ public class AddProductScreen implements Initializable {
         return namedParts;
     }
 
+    /** Search function for part IDs.
+     For use within the search results handler.
+     @param id Part ID to attempt to find.*/
     private Part getPartWithId(int id){
         ObservableList<Part> allParts = Inventory.getAllParts();
         for(Part p : allParts) {
@@ -118,6 +131,8 @@ public class AddProductScreen implements Initializable {
         return null;
     }
 
+    /** Add associated part button handler.
+     Adds selected part to associated parts list.*/
     public void onAddPartButton(ActionEvent actionEvent) {
         Part selectedPartToAdd = PartsTable.getSelectionModel().getSelectedItem();
         try {
@@ -138,6 +153,8 @@ public class AddProductScreen implements Initializable {
         }
     }
 
+    /** Remove associated part button handler.
+     Removes selected part to associated parts list.*/
     public void onRemovePartButton(ActionEvent actionEvent) {
         Part selectedPartToRemove = AssociatedPartTable.getSelectionModel().getSelectedItem();
 
@@ -154,6 +171,8 @@ public class AddProductScreen implements Initializable {
         }
     }
 
+    /** Generates unique part ID.
+     @param newID Lowest ID number to begin searching for unused IDs from.*/
     private int findNewProductID(int newID) {
         ObservableList<Product> allProds = Inventory.getAllProducts();
         for (Product p : allProds) {
@@ -165,10 +184,13 @@ public class AddProductScreen implements Initializable {
         return newID;
     }
 
+    /** Checks if inventory ranges are valid.
+     @return Returns true if valid and false if invalid.*/
     private boolean checkInventoryRanges(int stock, int min, int max) {
         return (stock >= min) && (stock <= max);
     }
 
+    /** Checks if valid integers are entered for stock, min, and max inventory fields.*/
     private void checkForInvalidIntFields() {
         try {
             int testInv = Integer.parseInt(InvField.getText());
@@ -184,6 +206,9 @@ public class AddProductScreen implements Initializable {
         }
     }
 
+    /** Save product button handler.
+     Creates and validates new product in inventory and returns to main screen.
+     RUNTIME ERROR - Added checkForInvalidIntFields() to prevent an error when invalid integers are entered.*/
     public void onSaveProduct(ActionEvent actionEvent) {
         int newID = 1;
         newID = findNewProductID(newID);

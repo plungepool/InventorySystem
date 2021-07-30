@@ -49,6 +49,8 @@ public class ModifyProductScreen implements Initializable {
 
     public static Product itemToModify;
 
+    /** Initializers for the modify product screen.
+     Populates fields with values from selected product.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         IdField.setText(String.valueOf(itemToModify.getId()));
@@ -72,6 +74,7 @@ public class ModifyProductScreen implements Initializable {
         associatedPartPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
+    /** Transitions to the main screen.*/
     public void toMainScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -81,6 +84,9 @@ public class ModifyProductScreen implements Initializable {
         stage.show();
     }
 
+    /** Handler for parts search function.
+     Attempts to search for parts by both ID and name.
+     RUNTIME ERROR - "No matching parts found" pop-up error for if ID integer can not be parsed.*/
     public void getPartResultsHandler(ActionEvent actionEvent) {
         String q = PartsSearch.getText();
         ObservableList<Part> parts = searchByPartName(q);
@@ -110,6 +116,9 @@ public class ModifyProductScreen implements Initializable {
         PartsTable.setItems(parts);
     }
 
+    /** Search function for part names.
+     For use within the search results handler.
+     @param partialName String or partial string to search for.*/
     private ObservableList<Part> searchByPartName(String partialName) {
         ObservableList<Part> namedParts = FXCollections.observableArrayList();
         ObservableList<Part> allParts = Inventory.getAllParts();
@@ -121,6 +130,9 @@ public class ModifyProductScreen implements Initializable {
         return namedParts;
     }
 
+    /** Search function for part IDs.
+     For use within the search results handler.
+     @param id Part ID to attempt to find.*/
     private Part getPartWithId(int id){
         ObservableList<Part> allParts = Inventory.getAllParts();
         for(Part p : allParts) {
@@ -131,6 +143,8 @@ public class ModifyProductScreen implements Initializable {
         return null;
     }
 
+    /** Add associated part button handler.
+     Adds selected part to associated parts list.*/
     public void onAddPartButton(ActionEvent actionEvent) {
         Part selectedPartToAdd = PartsTable.getSelectionModel().getSelectedItem();
         try {
@@ -151,6 +165,8 @@ public class ModifyProductScreen implements Initializable {
         }
     }
 
+    /** Remove associated part button handler.
+     Removes selected part to associated parts list.*/
     public void onRemovePartButton(ActionEvent actionEvent) {
         Part selectedPartToRemove = AssociatedPartTable.getSelectionModel().getSelectedItem();
 
@@ -167,10 +183,13 @@ public class ModifyProductScreen implements Initializable {
         }
     }
 
+    /** Checks if inventory ranges are valid.
+     @return Returns true if valid and false if invalid.*/
     private boolean checkInventoryRanges(int stock, int min, int max) {
         return (stock >= min) && (stock <= max);
     }
 
+    /** Checks if valid integers are entered for stock, min, and max inventory fields.*/
     private void checkForInvalidIntFields() {
         try {
             int testInv = Integer.parseInt(InvField.getText());
@@ -186,6 +205,9 @@ public class ModifyProductScreen implements Initializable {
         }
     }
 
+    /** Save product button handler.
+     Creates and validates new product in inventory and returns to main screen.
+     RUNTIME ERROR - Added checkForInvalidIntFields() to prevent an error when invalid integers are entered.*/
     public void onSaveProduct(ActionEvent actionEvent) {
         checkForInvalidIntFields();
         if (checkInventoryRanges(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {

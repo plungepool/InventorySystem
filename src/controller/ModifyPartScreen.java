@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controller for the add modify part screen.*/
 public class ModifyPartScreen implements Initializable {
     public RadioButton InhouseRadio;
     public RadioButton OutsourcedRadio;
@@ -32,6 +33,8 @@ public class ModifyPartScreen implements Initializable {
 
     public static Part itemToModify;
 
+    /** Initializers for the modify part screen.
+     Populates fields with values from selected part.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         IdField.setText(String.valueOf(itemToModify.getId()));
@@ -50,6 +53,7 @@ public class ModifyPartScreen implements Initializable {
         }
     }
 
+    /** Transitions to the main screen.*/
     public void toMainScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -59,18 +63,23 @@ public class ModifyPartScreen implements Initializable {
         stage.show();
     }
 
+    /** Changes text label to Machine ID when In-house radio button is selected.*/
     public void onInhouseSelect(ActionEvent actionEvent) {
         MachineCompanyLabel.setText("Machine ID");
     }
 
+    /** Changes text label to Company Name when Outsourced radio button is selected.*/
     public void onOutsourcedSelect(ActionEvent actionEvent) {
         MachineCompanyLabel.setText("Company Name");
     }
 
+    /** Checks if inventory ranges are valid.
+     @return Returns true if valid and false if invalid.*/
     private boolean checkInventoryRanges(int stock, int min, int max) {
         return (stock >= min) && (stock <= max);
     }
 
+    /** Checks if valid integers are entered for stock, min, and max inventory fields.*/
     private void checkForInvalidIntFields() {
         try {
             int testInv = Integer.parseInt(InvField.getText());
@@ -86,6 +95,9 @@ public class ModifyPartScreen implements Initializable {
         }
     }
 
+    /** Save part button handler.
+     Updates and validates part in inventory and returns to main screen.
+     RUNTIME ERROR - Added checkForInvalidIntFields() to prevent an error when invalid integers are entered.*/
     public void onSaveButton(ActionEvent actionEvent) throws IOException {
         checkForInvalidIntFields();
         if (checkInventoryRanges(Integer.parseInt(InvField.getText()), Integer.parseInt(MinField.getText()), Integer.parseInt(MaxField.getText()))) {

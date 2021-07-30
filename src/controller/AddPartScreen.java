@@ -19,6 +19,8 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controller for the add part screen.
+ FUTURE ENHANCEMENT - Storing most recently created part ID could make the findNewPartID method more efficient for large sets.*/
 public class AddPartScreen implements Initializable {
     public RadioButton InhouseRadio;
     public RadioButton OutsourcedRadio;
@@ -33,11 +35,13 @@ public class AddPartScreen implements Initializable {
     public Button CancelButton;
     public ToggleGroup sourceGroup;
 
+    /** Initializers for the add part screen.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 
+    /** Transitions to the main screen.*/
     public void toMainScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -47,14 +51,18 @@ public class AddPartScreen implements Initializable {
         stage.show();
     }
 
+    /** Changes text label to Machine ID when In-house radio button is selected.*/
     public void onInhouseSelect(ActionEvent actionEvent) {
         MachineCompanyLabel.setText("Machine ID");
     }
 
+    /** Changes text label to Company Name when Outsourced radio button is selected.*/
     public void onOutsourcedSelect(ActionEvent actionEvent) {
         MachineCompanyLabel.setText("Company Name");
     }
 
+    /** Generates unique part ID.
+     @param newID Lowest ID number to begin searching for unused IDs from.*/
     private int findNewPartID(int newID) {
         ObservableList<Part> allParts = Inventory.getAllParts();
         for (Part p : allParts) {
@@ -66,10 +74,13 @@ public class AddPartScreen implements Initializable {
         return newID;
     }
 
+    /** Checks if inventory ranges are valid.
+     @return Returns true if valid and false if invalid.*/
     private boolean checkInventoryRanges(int stock, int min, int max) {
         return (stock >= min) && (stock <= max);
     }
 
+    /** Checks if valid integers are entered for stock, min, and max inventory fields.*/
     private void checkForInvalidIntFields() {
         try {
             int testInv = Integer.parseInt(InvField.getText());
@@ -85,6 +96,9 @@ public class AddPartScreen implements Initializable {
         }
     }
 
+    /** Save part button handler.
+     Creates and validates new part in inventory and returns to main screen.
+     RUNTIME ERROR - Added checkForInvalidIntFields() to prevent an error when invalid integers are entered.*/
     public void onSavePart(ActionEvent actionEvent) throws IOException {
         int newID = 1;
         newID = findNewPartID(newID);

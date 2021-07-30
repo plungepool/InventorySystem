@@ -21,6 +21,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** Controller for the main program screen.
+ FUTURE ENHANCEMENT - Generalize search functions and call from this class instead of duplicating into other controllers.
+ FUTURE ENHANCEMENT - Add toMainScreen() function to this class to call from instead of duplicating in other controllers.*/
 public class MainScreen implements Initializable {
     public TableView<Part> PartsTable;
     public TextField PartsSearch;
@@ -44,6 +47,8 @@ public class MainScreen implements Initializable {
     public TableColumn<Object, Object> prodInvColumn;
     public TableColumn<Object, Object> prodPriceColumn;
 
+    /** Initializers for the main screen.
+     Populates part and product tables with all items from inventory.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         PartsTable.setItems(Inventory.getAllParts());
@@ -59,6 +64,7 @@ public class MainScreen implements Initializable {
         prodPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
+    /** Transitions to the add part screen.*/
     public void toAddPartScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddPartScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -68,6 +74,7 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
+    /** Transitions to the add product screen.*/
     public void toAddProductScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddProductScreen.fxml")));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -77,6 +84,8 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
+    /** Transitions to the modify part screen.
+     Passes needed information to screen controller from highlighted part.*/
     public void toModifyPartScreen(ActionEvent actionEvent) throws IOException {
         try {
             ModifyPartScreen.itemToModify = PartsTable.getSelectionModel().getSelectedItem();
@@ -96,6 +105,8 @@ public class MainScreen implements Initializable {
         }
     }
 
+    /** Transitions to the modify product screen.
+     Passes needed information to screen controller from highlighted part.*/
     public void toModifyProductScreen(ActionEvent actionEvent) throws IOException {
         try {
             ModifyProductScreen.itemToModify = ProductsTable.getSelectionModel().getSelectedItem();
@@ -115,6 +126,9 @@ public class MainScreen implements Initializable {
         }
     }
 
+    /** Handler for parts search function.
+     Attempts to search for parts by both ID and name.
+     RUNTIME ERROR - "No matching parts found" pop-up error for if ID integer can not be parsed.*/
     public void getPartResultsHandler(ActionEvent actionEvent) {
         String q = PartsSearch.getText();
         ObservableList<Part> parts = searchByPartName(q);
@@ -144,6 +158,9 @@ public class MainScreen implements Initializable {
         PartsTable.setItems(parts);
     }
 
+    /** Search function for part names.
+     For use within the search results handler.
+     @param partialName String or partial string to search for.*/
     private ObservableList<Part> searchByPartName(String partialName) {
         ObservableList<Part> namedParts = FXCollections.observableArrayList();
         ObservableList<Part> allParts = Inventory.getAllParts();
@@ -155,6 +172,9 @@ public class MainScreen implements Initializable {
         return namedParts;
     }
 
+    /** Search function for part IDs.
+     For use within the search results handler.
+     @param id Part ID to attempt to find.*/
     private Part getPartWithId(int id){
         ObservableList<Part> allParts = Inventory.getAllParts();
         for(Part p : allParts) {
@@ -165,6 +185,9 @@ public class MainScreen implements Initializable {
         return null;
     }
 
+    /** Handler for product search function.
+     Attempts to search for products by both ID and name.
+     RUNTIME ERROR - "No matching products found" pop-up error for if ID integer can not be parsed.*/
     public void getProductResultsHandler(ActionEvent actionEvent) {
         String q = ProductsSearch.getText();
         ObservableList<Product> products = searchByProductName(q);
@@ -194,6 +217,9 @@ public class MainScreen implements Initializable {
         ProductsTable.setItems(products);
     }
 
+    /** Search function for product names.
+     For use within the search results handler.
+     @param partialName String or partial string to search for.*/
     private ObservableList<Product> searchByProductName(String partialName) {
         ObservableList<Product> namedProds = FXCollections.observableArrayList();
         ObservableList<Product> allProds = Inventory.getAllProducts();
@@ -205,6 +231,9 @@ public class MainScreen implements Initializable {
         return namedProds;
     }
 
+    /** Search function for product IDs.
+     For use within the search results handler.
+     @param id Product ID to attempt to find.*/
     private Product getProductWithId(int id){
         ObservableList<Product> allProds = Inventory.getAllProducts();
         for(Product p : allProds) {
@@ -215,6 +244,8 @@ public class MainScreen implements Initializable {
         return null;
     }
 
+    /** Delete part button handler.
+     Attempts to delete selected part.*/
     public void onDeletePartButton(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Part");
@@ -238,6 +269,8 @@ public class MainScreen implements Initializable {
         }
     }
 
+    /** Delete product button handler.
+     Attempts to delete selected product. Delete is prevented if product has associated parts.*/
     public void onDeleteProductButton(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Product");
@@ -271,7 +304,16 @@ public class MainScreen implements Initializable {
         }
     }
 
+    /** Exit button handler.
+     Exits program.*/
     public void onExitButton(ActionEvent actionEvent) {
-        System.exit(0);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setHeaderText("Are you sure?");
+        alert.setContentText("Press ok to exit the program.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            System.exit(0);
+        }
     }
 }

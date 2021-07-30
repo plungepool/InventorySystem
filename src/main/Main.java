@@ -20,8 +20,10 @@ import model.Product;
 import java.io.IOException;
 import java.util.Objects;
 
+/** This is the main class.*/
 public class Main extends Application {
 
+    /** Loads test data for application startup.*/
     private void addTestData() {
         Part MCU = new Part(1, "ARM Processor", 6.00, 40, 0, 450);
         Inventory.addPart(MCU);
@@ -38,6 +40,7 @@ public class Main extends Application {
         Inventory.addProduct(A);
     }
 
+    /** Defines what happens on application startup.*/
     @Override
     public void start(Stage primaryStage) throws IOException {
         addTestData();
@@ -48,6 +51,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /** Launches main.
+     Javadocs path: InventorySystem/javadocs/ */
     public static void main(String[] args) {
         launch(args);
     }
